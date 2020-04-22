@@ -54,7 +54,11 @@
     ]
   },
   "dependencies": {
+    "@types/styletron-engine-atomic": "^1.1.0",
+    "@types/styletron-react": "^5.0.2",
+    "@types/styletron-standard": "^2.0.0",
     "aphrodite": "^2.4.0",
+    "baseui": "^9.71.0",
     "bootstrap": "^4.3.1",
     "connected-react-router": "^6.5.2",
     "cross-env": "^6.0.3",
@@ -70,7 +74,9 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-observable": "^1.2.0",
     "rxjs": "^6.5.3",
-    "start-server-and-test": "^1.10.6"
+    "start-server-and-test": "^1.10.6",
+    "styletron-engine-atomic": "^1.4.6",
+    "styletron-react": "^5.2.7"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
