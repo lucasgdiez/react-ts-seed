@@ -70,3 +70,8 @@ jobs:
 
       - run: yarn test
       - run: yarn e2e
+
+workflows:
+  build-and-test:
+    jobs:
+      - build
