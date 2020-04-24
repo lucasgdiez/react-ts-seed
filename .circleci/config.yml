@@ -35,8 +35,11 @@ jobs:
             - ~/.npm
             - ~/.cache
       - run:
+          name: Running Server
+          command: npm run start:dev
+      - run:
           name: Running E2E tests
-          command: npm run e2e-circleci
+          command: npm run e2e:run
 
 workflows:
   build-and-test:
