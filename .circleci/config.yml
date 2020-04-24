@@ -16,7 +16,16 @@ workflows:
   build-and-test:
     jobs:
       - build-with-npm-test
+      - cypress/install:
+          name: 'Mac install'
+          executor: mac
+          # and builds the app using this command
+          build: 'npm run build'
+          post-steps:
+            # show Cypress cache folder and binary versions
+            # to check if we are caching previous binary versions
+            - run: npx cypress cache path
+            - run: npx cypress cache list
+            - run: npx cypress info
       - cypress/run:
-          yarn: true
-          executor: cypress/browsers-chrome69
-          browser: chrome
+          start: npm run e2e
