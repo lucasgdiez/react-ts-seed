@@ -26,6 +26,7 @@
     "e2e:dev": "cypress open --browser chrome",
     "e2e:run": "cross-env CYPRESS_RETRIES=3 cypress run --browser chrome",
     "e2e": "start-server-and-test start:dev http://localhost:3000 e2e:run",
+    "e2e-wait": "start:dev & wait-on http://localhost:3000 e2e:run",
     "build-storybook": "build-storybook -s public",
     "prettier": "prettier --parser typescript --single-quote",
     "prettier:check": "yarn prettier --list-different \"src/**/*.{ts,tsx}\"",
@@ -70,7 +71,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-observable": "^1.2.0",
     "rxjs": "^6.5.5",
-    "start-server-and-test": "^1.11.0"
+    "start-server-and-test": "^1.11.0",
+    "wait-on": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
