@@ -3,7 +3,7 @@ orbs:
   node: circleci/node@1.1.6
   cypress: cypress-io/cypress@1.19.3
 jobs:
-  build-with-npm-test-and-npm-e2e:
+  build-with-npm-test:
     executor:
       name: node/default
     steps:
@@ -12,8 +12,8 @@ jobs:
           steps:
             - run: npm install
             - run: npm test
-            - run: npm run e2e
 workflows:
   build-and-test:
     jobs:
       - build-with-npm-test-and-npm-e2e
+      - cypress/run
