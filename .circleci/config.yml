@@ -35,9 +35,9 @@ jobs:
             - ~/.npm
             - ~/.cache
       - run: npm run start:dev
-      # - run:
-      #     name: Running E2E tests
-      #     command: npm run e2e
+      - run:
+          name: Running E2E tests
+          command: npm run e2e
 
 workflows:
   build-and-test:
