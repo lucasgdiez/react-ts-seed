@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  build-and-test:
+  build-with-npm-test-and-npm-e2e:
     executor:
       name: node/default
     steps:
@@ -11,19 +11,8 @@ jobs:
           steps:
             - run: npm install
             - run: npm test
-  build-and-test-with-e2e:
-    executor:
-      name: node/default
-    steps:
-      -checkout
-      -node/with-cache:
-        steps:
-          -run: npm install
-          -run: npm e2e
+            - run: npm e2e
 workflows:
-    build-and-test:
-      jobs:
-        - build-and-test
-    build-and-test-with-e2e:
-      jobs:
-        - build-and-test-with-e2e
+  build-and-test:
+    jobs:
+      - build-with-npm-test-and-npm-e2e
