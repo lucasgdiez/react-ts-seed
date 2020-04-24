@@ -36,9 +36,11 @@ jobs:
           paths:
             - ~/.npm
             - ~/.cache
-       - run: npm run start:dev
-       - run: npm test
-       - run: npm run e2e:run
+      - node/with-cache:
+          steps:
+            - run: npm run start:dev
+            - run: npm test
+            - run: npm run e2e:run
 
 workflows:
   build-and-test:
