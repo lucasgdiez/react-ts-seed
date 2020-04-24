@@ -11,7 +11,9 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm install
+            - run: npm run start:dev
             - run: npm test
+            - run: npm run e2e:run
   build-e2e:
     docker:
       # the Docker image with Cypress dependencies
@@ -45,4 +47,4 @@ workflows:
   build-and-test:
     jobs:
       - build-with-npm-test
-      - build-e2e
+      # - build-e2e
