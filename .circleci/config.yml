@@ -1,54 +1,72 @@
+# version: 2.1
+# orbs:
+#   node: circleci/node@1.1.6
+#   cypress: cypress-io/cypress@1
+# jobs:
+#   build-with-npm-test:
+#     executor:
+#       name: node/default
+#     steps:
+#       - checkout
+#       - node/with-cache:
+#           steps:
+#             - run: npm install
+#             - run: npm test
+#             - run: npm run e2e
+# build-e2e:
+#   docker:
+#     # the Docker image with Cypress dependencies
+#     - image: cypress/base:8
+#       environment:
+#         ## this enables colors in the output
+#         TERM: xterm
+#   working_directory: ~/app
+#   parallelism: 1
+#   steps:
+#     - checkout
+#     - restore_cache:
+#         keys:
+#           - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
+#           - v2-deps-{{ .Branch }}-
+#           - v2-deps-
+#     - run: npm install
+#     - save_cache:
+#         key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
+#         paths:
+#           - ~/.npm
+#           - ~/.cache
+#     - node/with-cache:
+#         steps:
+#           - run: npm run start:dev
+#           - run: npm test
+#           - run: npm run e2e
+
+# workflows:
+#   build-and-test:
+#     jobs:
+#       - build-with-npm-test
+# - build-e2e
+
 version: 2.1
-orbs:
-  node: circleci/node@1.1.6
-  cypress: cypress-io/cypress@1
 jobs:
-  build-with-npm-test:
-    executor:
-      name: node/default
+  build:
+    build-and-test:
+      - image: circleci/node:12.9.1-browsers
+    working_directory: ~/repo
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run:
-                name: update chrome
-                command: |
-                  sudo apt-get install lsb-release
-                  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-                  sudo dpkg -i google-chrome-stable_current_amd64.deb
-            - run: npm install
-            - run: npm test
-            - run: npm run e2e
-  # build-e2e:
-  #   docker:
-  #     # the Docker image with Cypress dependencies
-  #     - image: cypress/base:8
-  #       environment:
-  #         ## this enables colors in the output
-  #         TERM: xterm
-  #   working_directory: ~/app
-  #   parallelism: 1
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-  #           - v2-deps-{{ .Branch }}-
-  #           - v2-deps-
-  #     - run: npm install
-  #     - save_cache:
-  #         key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-  #         paths:
-  #           - ~/.npm
-  #           - ~/.cache
-  #     - node/with-cache:
-  #         steps:
-  #           - run: npm run start:dev
-  #           - run: npm test
-  #           - run: npm run e2e
 
-workflows:
-  build-and-test:
-    jobs:
-      - build-with-npm-test
-      # - build-e2e
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+        paths:
+          - node_modules
+        key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: yarn test
+      - run: yarn e2e
