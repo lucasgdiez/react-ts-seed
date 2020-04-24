@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@1.1.6
-  cypress: cypress-io/cypress@1.16.1
+  cypress: cypress-io/cypress@1
 jobs:
   build-with-npm-test:
     executor:
@@ -17,13 +17,13 @@ workflows:
     jobs:
       - build-with-npm-test
       - cypress/install:
-          # and builds the app using this command
-          build: 'npm run build'
-          post-steps:
-            # show Cypress cache folder and binary versions
-            # to check if we are caching previous binary versions
-            - run: npx cypress cache path
-            - run: npx cypress cache list
-            - run: npx cypress info
+          build: 'npm run build' # run a custom app build step
       - cypress/run:
-          start: npm run e2e
+          requires:
+            - cypress/install
+          record: true # record results on Cypress Dashboard
+          parallel: true # split all specs across machines
+          parallelism: 4 # use 4 CircleCI machines to finish quickly
+          group: 'all tests' # name this group "all tests" on the dashboard
+          start: 'npm start' # start server before running tests
+          e2e: 'npm e2e'
