@@ -34,10 +34,9 @@ jobs:
           paths:
             - ~/.npm
             - ~/.cache
-      - run: npm run start:dev
       - run:
           name: Running E2E tests
-          command: npm run e2e:run
+          command: npm run e2e-circleci
 
 workflows:
   build-and-test:
