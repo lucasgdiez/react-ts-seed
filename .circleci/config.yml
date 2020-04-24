@@ -10,12 +10,6 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run:
-                name: update chrome
-                command: |
-                  sudo apt-get install lsb-release
-                  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-                  sudo dpkg -i google-chrome-stable_current_amd64.deb
             - run: npm install
             - run: npm test
             - run: npm run e2e
