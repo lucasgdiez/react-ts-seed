@@ -15,5 +15,5 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - build-with-npm-test-and-npm-e2e
+      - build-with-npm-test
       - cypress/run
