@@ -34,7 +34,7 @@ jobs:
           paths:
             - ~/.npm
             - ~/.cache
-      - run: start:dev
+      - run: npm run start:dev
       # - run:
       #     name: Running E2E tests
       #     command: npm run e2e
