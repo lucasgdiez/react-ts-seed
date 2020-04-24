@@ -11,39 +11,38 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm install
-            - run: npm run start:dev
             - run: npm test
             - run: npm run e2e
-  build-e2e:
-    docker:
-      # the Docker image with Cypress dependencies
-      - image: cypress/base:8
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
-    working_directory: ~/app
-    parallelism: 1
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-            - v2-deps-{{ .Branch }}-
-            - v2-deps-
-      - run: npm install
-      - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ~/.npm
-            - ~/.cache
-      - node/with-cache:
-          steps:
-            - run: npm run start:dev
-            - run: npm test
-            - run: npm run e2e:run
+  # build-e2e:
+  #   docker:
+  #     # the Docker image with Cypress dependencies
+  #     - image: cypress/base:8
+  #       environment:
+  #         ## this enables colors in the output
+  #         TERM: xterm
+  #   working_directory: ~/app
+  #   parallelism: 1
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
+  #           - v2-deps-{{ .Branch }}-
+  #           - v2-deps-
+  #     - run: npm install
+  #     - save_cache:
+  #         key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
+  #         paths:
+  #           - ~/.npm
+  #           - ~/.cache
+  #     - node/with-cache:
+  #         steps:
+  #           - run: npm run start:dev
+  #           - run: npm test
+  #           - run: npm run e2e
 
 workflows:
   build-and-test:
     jobs:
       - build-with-npm-test
-      - build-e2e
+      # - build-e2e
