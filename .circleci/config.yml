@@ -28,7 +28,7 @@ jobs:
             - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
             - v2-deps-{{ .Branch }}-
             - v2-deps-
-      - run: npm ci
+      - run: npm install
       - save_cache:
           key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
