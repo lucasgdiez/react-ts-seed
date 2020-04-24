@@ -40,7 +40,7 @@ jobs:
           steps:
             - run: npm run start:dev
             - run: npm test
-            - run: npm run start:dev & npm run e2e:run
+            - run: npm run start:dev && npm run e2e:run
 
 workflows:
   build-and-test:
