@@ -17,8 +17,6 @@ workflows:
     jobs:
       - build-with-npm-test
       - cypress/install:
-          name: 'Mac install'
-          executor: mac
           # and builds the app using this command
           build: 'npm run build'
           post-steps:
