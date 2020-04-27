@@ -50,6 +50,7 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1
+  react: thefrontside/react@0.2.0
 jobs:
   build-and-test:
     docker:
@@ -73,10 +74,18 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - react/install
+
       - run: yarn test
 
       - run: yarn e2e-wait
-
+  build-and-test-react-orb:
+    - run: yarn install
+    - react/install
+    - react/test:
+        requires:
+          - react/install
+    - run: yarn e2e
 workflows:
   build-and-test:
     jobs:
