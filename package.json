@@ -25,7 +25,7 @@
     "storybook": "start-storybook -p 9009 -s public",
     "cypress": "cypress",
     "e2e:dev": "cypress open --browser chrome",
-    "e2e:run": "cross-env CYPRESS_RETRIES=3 cypress run --browser electron",
+    "e2e:run": "cross-env CYPRESS_RETRIES=3 cypress run --browser chrome",
     "e2e": "start-server-and-test start:dev http://localhost:3000 e2e:run",
     "e2e-wait": "npm run start:dev && npm run e2e:run",
     "build-storybook": "build-storybook -s public",
