@@ -111,7 +111,7 @@ jobs:
       # if they were cached, this step is super quick
       - run:
           name: Install dependencies
-          command: npm ci
+          command: npm install
       - run: npm run cy:verify
       # save npm dependencies and Cypress binary for future runs
       - save_cache:
