@@ -99,7 +99,7 @@ jobs:
       - run:
           when: always
           name: Run Cypress E2E
-          command: npm run e2e:run
+          command: npm run cypress run --browser chrome
       - store_artifacts:
           path: cypress/reports
       - store_artifacts:
