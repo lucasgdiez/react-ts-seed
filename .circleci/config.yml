@@ -1,99 +1,132 @@
+# # version: 2.1
+# # orbs:
+# #   node: circleci/node@1.1.6
+# #   cypress: cypress-io/cypress@1
+# # jobs:
+# #   build-with-npm-test:
+# #     executor:
+# #       name: node/default
+# #     steps:
+# #       - checkout
+# #       - node/with-cache:
+# #           steps:
+# #             - run: npm install
+# #             - run: npm test
+# #             - run: npm run e2e
+# # build-e2e:
+# #   docker:
+# #     # the Docker image with Cypress dependencies
+# #     - image: cypress/base:8
+# #       environment:
+# #         ## this enables colors in the output
+# #         TERM: xterm
+# #   working_directory: ~/app
+# #   parallelism: 1
+# #   steps:
+# #     - checkout
+# #     - restore_cache:
+# #         keys:
+# #           - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
+# #           - v2-deps-{{ .Branch }}-
+# #           - v2-deps-
+# #     - run: npm install
+# #     - save_cache:
+# #         key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
+# #         paths:
+# #           - ~/.npm
+# #           - ~/.cache
+# #     - node/with-cache:
+# #         steps:
+# #           - run: npm run start:dev
+# #           - run: npm test
+# #           - run: npm run e2e
+
+# # workflows:
+# #   build-and-test:
+# #     jobs:
+# #       - build-with-npm-test
+# # - build-e2e
+
 # version: 2.1
 # orbs:
-#   node: circleci/node@1.1.6
-#   cypress: cypress-io/cypress@1
+#   react: thefrontside/react@0.2.0
+#   cypress: cypress-io/cypress@1.0.0
 # jobs:
-#   build-with-npm-test:
-#     executor:
-#       name: node/default
+#   build-and-test:
+#     docker:
+#       - image: circleci/node:12.9.1-browsers
+
+#     working_directory: ~/repo
+
 #     steps:
 #       - checkout
-#       - node/with-cache:
-#           steps:
-#             - run: npm install
-#             - run: npm test
-#             - run: npm run e2e
-# build-e2e:
-#   docker:
-#     # the Docker image with Cypress dependencies
-#     - image: cypress/base:8
-#       environment:
-#         ## this enables colors in the output
-#         TERM: xterm
-#   working_directory: ~/app
-#   parallelism: 1
-#   steps:
-#     - checkout
-#     - restore_cache:
-#         keys:
-#           - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-#           - v2-deps-{{ .Branch }}-
-#           - v2-deps-
-#     - run: npm install
-#     - save_cache:
-#         key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-#         paths:
-#           - ~/.npm
-#           - ~/.cache
-#     - node/with-cache:
-#         steps:
-#           - run: npm run start:dev
-#           - run: npm test
-#           - run: npm run e2e
+
+#       - restore_cache:
+#           keys:
+#             - v1-dependencies-{{ checksum "package.json" }}
+#             # fallback to using the latest cache if no exact match is found
+#             - v1-dependencies-
+
+#       - run: yarn install
+
+#       - save_cache:
+#           paths:
+#             - node_modules
+#           key: v1-dependencies-{{ checksum "package.json" }}
+
+#       - run: yarn test
+
+#       - run: yarn e2e-wait
+#   cypress-e2e:
+#     docker:
+#       - image: cypress/base:10
+
+#     parallelism: 4
+#     steps:
+#       - checkout
+#       # note: omitting caching for brevity
+#       # quickly install NPM dependencies
+#       - npm install
+#       # load balance all tests across 4 CI machines
+#       - $(npm bin)/cypress run --parallel
 
 # workflows:
 #   build-and-test:
 #     jobs:
-#       - build-with-npm-test
-# - build-e2e
+#       - build-and-test
+#       - cypress-e2e
 
-version: 2.1
-orbs:
-  react: thefrontside/react@0.2.0
-  cypress: cypress-io/cypress@1.0.0
+version: 2
 jobs:
-  build-and-test:
-    docker:
-      - image: circleci/node:12.9.1-browsers
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-      - run: yarn test
-
-      - run: yarn e2e-wait
-  cypress-e2e:
+  test:
     docker:
       - image: cypress/base:10
-        environment:
-          TERM: xterm
-    working_directory: ~/app
-    parallelism: 4
     steps:
       - checkout
-      # note: omitting caching for brevity
-      # quickly install NPM dependencies
-      - npm install
-      # load balance all tests across 4 CI machines
-      - $(npm bin)/cypress run --parallel
+      # restore folders with npm dependencies and Cypress binary
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "package.json" }}
+      # install npm dependencies and Cypress binary
+      # if they were cached, this step is super quick
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run: npm run cy:verify
+      # save npm dependencies and Cypress binary for future runs
+      - save_cache:
+          key: cache-{{ checksum "package.json" }}
+          paths:
+            - ~/.npm
+            - ~/.cache
+      # start server before starting tests
+      - run:
+          command: npm run start
+          background: true
+      - run: npm run e2e:run
 
 workflows:
-  build-and-test:
+  version: 2
+  build:
     jobs:
-      - build-and-test
-      - cypress-e2e
+      - test
