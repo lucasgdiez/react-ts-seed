@@ -163,6 +163,7 @@ jobs:
 workflows:
   build:
     jobs:
+      - test
       - cypress/run:
           executor: cypress/browsers-chrome69
           browser: chrome
