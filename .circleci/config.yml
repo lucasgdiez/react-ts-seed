@@ -74,19 +74,26 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - react/install
-
       - run: yarn test
 
       - run: yarn e2e-wait
-  build-and-test-react-orb:
-    - run: yarn install
-    - react/install
-    - react/test:
-        requires:
-          - react/install
-    - run: yarn e2e
+
 workflows:
   build-and-test:
     jobs:
       - build-and-test
+  react-testing:
+    jobs:
+      - build-and-test
+      - react/eslint:
+          requires:
+            - react/install
+      - react/stylelint:
+          requires:
+            - react/install
+      - react/test:
+          requires:
+            - react/install
+      - react/coverage:
+          requires:
+            - react/install
