@@ -121,6 +121,7 @@ jobs:
       - run:
           command: npm run start-react
           background: true
+      - run: npm run e2e:run
 
 workflows:
   version: 2
@@ -130,3 +131,4 @@ workflows:
       - cypress/run:
           executor: cypress/browsers-chrome69
           browser: chrome
+          start: npm start
