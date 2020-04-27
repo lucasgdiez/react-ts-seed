@@ -10,7 +10,7 @@
   "scripts": {
     "start": "yarn start:dev",
     "start:local": "dotenv -e ./src/config/.env.local react-scripts start",
-    "start:dev": "dotenv -e ./src/config/.env.development react-scripts start",
+    "start:dev": "react-scripts start",
     "start:qa": "dotenv -e ./src/config/.env.qa react-scripts start",
     "build": "yarn build:production",
     "build:development": "dotenv -e ./src/config/.env.development react-scripts build",
