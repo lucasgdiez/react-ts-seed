@@ -87,19 +87,19 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - v1-npm-deps-{{ .Branch }}-{{ checksum "package.json" }}
             - v1-npm-deps-{{ .Branch }}-
             - v1-npm-deps-
       - run: npm install
       - save_cache:
-          key: v1-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: v1-npm-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ~/.npm
             - ~/.cache
       - run:
           when: always
           name: Run Cypress E2E
-          command: npm run cypress
+          command: npm run e2e:run
       - store_artifacts:
           path: cypress/reports
       - store_artifacts:
