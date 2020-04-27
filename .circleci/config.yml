@@ -85,6 +85,7 @@ workflows:
   react-testing:
     jobs:
       - build-and-test
+      - react/install
       - react/eslint:
           requires:
             - react/install
