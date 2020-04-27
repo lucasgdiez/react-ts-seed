@@ -79,31 +79,18 @@ jobs:
       - run: yarn e2e-wait
   cypress-e2e:
     docker:
-      - image: cypress/base:8
+      - image: cypress/base:10
         environment:
           TERM: xterm
     working_directory: ~/app
+    parallelism: 4
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-npm-deps-{{ .Branch }}-{{ checksum "package.json" }}
-            - v1-npm-deps-{{ .Branch }}-
-            - v1-npm-deps-
-      - run: npm install
-      - save_cache:
-          key: v1-npm-deps-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ~/.npm
-            - ~/.cache
-      - run:
-          when: always
-          name: Run Cypress E2E
-          command: npm run start:dev && cypress run --browser chrome
-      - store_artifacts:
-          path: cypress/reports
-      - store_artifacts:
-          path: cypress/videos
+      # note: omitting caching for brevity
+      # quickly install NPM dependencies
+      - npm i
+      # load balance all tests across 4 CI machines
+      - $(npm bin)/cypress run --parallel
 
 workflows:
   build-and-test:
