@@ -49,8 +49,8 @@
 
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1
   react: thefrontside/react@0.2.0
+  cypress: cypress-io/cypress@1.0.0
 jobs:
   build-and-test:
     docker:
@@ -77,24 +77,36 @@ jobs:
       - run: yarn test
 
       - run: yarn e2e-wait
+  cypress-e2e:
+    docker:
+      - image: cypress/base:8
+        environment:
+          TERM: xterm
+    working_directory: ~/app
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - v1-npm-deps-{{ .Branch }}-
+            - v1-npm-deps-
+      - run: npm install
+      - save_cache:
+          key: v1-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/.npm
+            - ~/.cache
+      - run:
+          when: always
+          name: Run Cypress E2E
+          command: npm run cypress
+      - store_artifacts:
+          path: cypress/reports
+      - store_artifacts:
+          path: cypress/videos
 
 workflows:
   build-and-test:
     jobs:
       - build-and-test
-  react-testing:
-    jobs:
-      - build-and-test
-      - react/install
-      - react/eslint:
-          requires:
-            - react/install
-      - react/stylelint:
-          requires:
-            - react/install
-      - react/test:
-          requires:
-            - react/install
-      - react/coverage:
-          requires:
-            - react/install
+      - cypress-e2e
