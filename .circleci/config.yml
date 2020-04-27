@@ -99,7 +99,6 @@
 version: 2
 orbs:
   cypress: cypress-io/cypress@1
-jobs:
   # test:
   #   docker:
   #     - image: cypress/base:10
