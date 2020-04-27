@@ -170,5 +170,5 @@ workflows:
           install-command: npm install
           executor: cypress/browsers-chrome69
           browser: chrome
-          start: npm run start
+          start: nohup npm run start
           wait-on: 'http://localhost:3000'
