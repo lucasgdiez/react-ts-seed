@@ -119,7 +119,7 @@ jobs:
             - ~/.cache
       # start server before starting tests
       - run:
-          command: npm run start
+          command: npm run react-scripts start
           background: true
       - run: npm run e2e:run
 
