@@ -133,5 +133,10 @@
     "jsxSingleQuote": false,
     "jsxBracketSameLine": false,
     "proseWrap": "preserve"
-  }
+  },
+  "size-limit": [
+    {
+      "path": "build/static/**/*.{js,css,svg,woff,woff2,png,ttf,html}"
+    }
+  ]
 }
