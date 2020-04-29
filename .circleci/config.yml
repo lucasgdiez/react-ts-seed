@@ -30,11 +30,7 @@ jobs:
       - run: yarn build
 
       - store_artifacts:
-          path: /tmp/artifact-1
-          destination: artifact-file
-
-      - store_artifacts:
-          path: /tmp/artifacts
+          path: /build
 workflows:
   build:
     jobs:
