@@ -105,12 +105,19 @@ jobs:
           at: .
       - run: yarn build
       - run: cd build
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: .
+          # Must be relative path from root
+          paths:
+            - build
   Deploy:
     executor: my-executor
     steps:
       - attach_workspace:
-          at: .
-      - run: echo "Deploy code here"
+          at: build
+      - run: ls
 
 workflows:
   version: 2
