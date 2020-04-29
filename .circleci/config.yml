@@ -37,6 +37,20 @@ jobs:
     - store_artifacts:
         path: build
 
+workflows:
+  version: 2
+  build_accept_deploy:
+    jobs:
+      - build
+      - unit-testing-pipe:
+          requires:
+            - build
+      - e2e-testing-pipe:
+          requires:
+            - build
+      - saving-build:
+          requires:
+            - build
   # build-and-test:
   #   docker:
   #     - image: circleci/node:12.9.1-browsers
@@ -60,7 +74,6 @@ jobs:
   #     - run: yarn build
   #     - run: cd build
   #     - run: ls
-
 # workflows:
 #   build:
 #     jobs:
@@ -81,17 +94,3 @@ jobs:
 #           requires:
 #             - build
 
-workflows:
-  version: 2
-  build_accept_deploy:
-    jobs:
-      - build
-      - unit-testing-pipe:
-          requires:
-            - build
-      - e2e-testing-pipe:
-          requires:
-            - build
-      - saving-build:
-          requires:
-            - build
