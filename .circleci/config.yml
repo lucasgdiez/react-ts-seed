@@ -96,8 +96,7 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-      - run: yarn set version berry
-      - run: yarn add cypress
+      - run: yarn add cypress --dev
       - run:
           name: 'Running React Server for e2e'
           command: sed -i '/process.env.CI/,+7 d' node_modules/react-scripts/scripts/start.js
