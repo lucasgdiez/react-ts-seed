@@ -44,7 +44,7 @@ version: 2.1
 executors:
   my-executor:
     docker:
-      - image: buildpack-deps:jessie
+      - image: circleci/node:12.9.1-browsers
     working_directory: /tmp
 
 jobs:
