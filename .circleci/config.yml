@@ -5,7 +5,6 @@ jobs:
       - image: circleci/node:12.9.1-browsers
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
@@ -34,7 +33,14 @@ jobs:
 
       - store_artifacts:
           path: build
+  test:
+    steps:
+      - checkout
+      - run: yarn test
 workflows:
   build:
     jobs:
       - build-and-test
+      - test:
+          requires:
+            - build-and-test
