@@ -51,9 +51,6 @@ jobs:
     executor: my-executor
     steps:
       - checkout
-      - run: mkdir -p workspace
-      - run: echo "Hello, world!" > workspace/echo-output
-      - run: ls
       - restore_cache:
           keys:
             - v4-dependencies-{{ checksum "package.json" }}
@@ -67,7 +64,6 @@ jobs:
             - node_modules
             - ~/.cache/Cypress
           key: v4-dependencies-{{ checksum "package.json" }}
-      - run: ls
 
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
       - persist_to_workspace:
@@ -78,7 +74,6 @@ jobs:
           paths:
             - .
             - cache
-      - run: ls
 
   Unit-Testing:
     executor: my-executor
@@ -110,7 +105,12 @@ jobs:
           at: .
       - run: yarn build
       - run: cd build
-      - run: ls
+  Deploy:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+          at: .
+      - run: echo "Deploy code here"
 
 workflows:
   version: 2
@@ -124,7 +124,10 @@ workflows:
       - E2E-Testing:
           requires:
             - flow
-      - Build-and-Deploy:
+      - Build:
           requires:
             - Unit-Testing
             - E2E-Testing
+      - Deploy:
+          requires:
+            - Build
