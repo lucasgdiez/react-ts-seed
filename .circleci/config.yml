@@ -1,16 +1,9 @@
 version: 2.1
-orbs:
-  cypress: cypress-io/cypress@1
-commands:
-  sayhello:
-    description: 'A very simple command for demonstration purposes'
-    steps:
-      - run: cd build
-      - run: ls
 jobs:
   build:
     docker:
       - image: circleci/node:12.9.1-browsers
+    working_directory: /tmp
     steps:
       - checkout
 
@@ -41,19 +34,8 @@ jobs:
       - run: ls
 
       - store_artifacts:
-          path: /build
-  deploy:
-    steps:
-      - checkout
-      - sayhello
+          path: /tmp/build
 workflows:
   build:
     jobs:
-      - build
-      # - cypress/run:
-      #     install-command: npm install
-      #     executor: cypress/browsers-chrome69
-      #     browser: chrome
-      #     start: npm run start
-      #     wait-on: 'http://localhost:3000'
-      - deploy
+      - build-and-test
