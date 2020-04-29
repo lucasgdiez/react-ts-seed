@@ -72,10 +72,10 @@ jobs:
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
-          root: node_modules
+          root: .
           # Must be relative path from root
           paths:
-            - workspace
+            - .
       - run: ls
 
   downstream:
@@ -83,8 +83,9 @@ jobs:
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /workplace/node_modules
+          at: .
 
+      - run: ls
       - run: |
           if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
             echo "It worked!";
