@@ -65,6 +65,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
+            - ~/.cache/yarn
           key: v2-dependencies-{{ checksum "package.json" }}
       - run: ls
 
