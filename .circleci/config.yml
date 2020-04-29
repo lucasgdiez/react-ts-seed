@@ -90,6 +90,7 @@ jobs:
           else
             echo "Nope!"; exit 1
           fi
+      - run: yarn test
   downstream2:
     executor: my-executor
     steps:
