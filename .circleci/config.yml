@@ -72,10 +72,11 @@ jobs:
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
-          root: /tmp/workspace
+          root: /workspace
           # Must be relative path from root
           paths:
             - build
+      - run: ls
 
   downstream:
     executor: my-executor
@@ -90,16 +91,6 @@ jobs:
           else
             echo "Nope!"; exit 1
           fi
-      - run: ls
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
       - run: ls
       - run: yarn test
   downstream2:
