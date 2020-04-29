@@ -45,7 +45,7 @@ executors:
   my-executor:
     docker:
       - image: circleci/node:12.9.1-browsers
-    working_directory: /tmp
+    working_directory: /
 
 jobs:
   flow:
