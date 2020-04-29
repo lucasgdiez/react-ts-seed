@@ -28,6 +28,13 @@ jobs:
       - run: yarn e2e
 
       - run: yarn build
+
+      - store_artifacts:
+          path: /tmp/artifact-1
+          destination: artifact-file
+
+      - store_artifacts:
+          path: /tmp/artifacts
 workflows:
   build:
     jobs:
