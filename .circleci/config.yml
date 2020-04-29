@@ -3,7 +3,6 @@ jobs:
   build-and-test:
     docker:
       - image: circleci/node:12.9.1-browsers
-    working_directory: /tmp
     steps:
       - checkout
 
@@ -34,7 +33,7 @@ jobs:
       - run: ls
 
       - store_artifacts:
-          path: /tmp/build
+          path: /build
 workflows:
   build:
     jobs:
