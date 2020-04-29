@@ -77,6 +77,7 @@ jobs:
           # Must be relative path from root
           paths:
             - .
+            - ~/.cache
       - run: ls
 
   Unit-Testing:
