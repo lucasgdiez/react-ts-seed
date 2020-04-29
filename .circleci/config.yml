@@ -78,30 +78,25 @@ jobs:
             - .
       - run: ls
 
-  downstream:
+  Unit-Testing:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: .
+      - run: yarn test
+  E2E-Testing:
     executor: my-executor
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: .
 
-      - run: ls
-      # - checkout
-      - run: ls
-      - run: yarn test
-  downstream2:
-    executor: my-executor
-    steps:
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: /tmp/workspace
+      - run:
+          name: 'Running React Server for e2e'
+          command: sed -i '/process.env.CI/,+7 d' node_modules/react-scripts/scripts/start.js
 
-      - run: |
-          if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
+      - run: yarn e2e
 
 workflows:
   version: 2
@@ -109,9 +104,9 @@ workflows:
   btd:
     jobs:
       - flow
-      - downstream:
+      - Unit-Testing:
           requires:
             - flow
-      - downstream2:
+      - E2E-Testing:
           requires:
             - flow
