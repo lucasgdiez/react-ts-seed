@@ -1,6 +1,12 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1
+commands:
+  sayhello:
+    description: 'A very simple command for demonstration purposes'
+    steps:
+      - run: cd build
+      - run: ls
 jobs:
   build:
     docker:
@@ -23,7 +29,9 @@ jobs:
 
       - run: yarn test
 
-      - run: sed -i '/process.env.CI/,+7 d' node_modules/react-scripts/scripts/start.js
+      - run:
+          name: 'Running React Server for e2e'
+          command: sed -i '/process.env.CI/,+7 d' node_modules/react-scripts/scripts/start.js
 
       - run: yarn e2e
 
@@ -31,8 +39,13 @@ jobs:
 
       - run: cd build
       - run: ls
+
       - store_artifacts:
           path: /build
+  deploy:
+    steps:
+      - checkout
+      - sayhello
 workflows:
   build:
     jobs:
@@ -43,3 +56,4 @@ workflows:
       #     browser: chrome
       #     start: npm run start
       #     wait-on: 'http://localhost:3000'
+      - deploy
