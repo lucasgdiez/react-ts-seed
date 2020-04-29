@@ -86,13 +86,7 @@ jobs:
           at: .
 
       - run: ls
-      - run: |
-          if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
-      - checkout
+      # - checkout
       - run: ls
       - run: yarn test
   downstream2:
