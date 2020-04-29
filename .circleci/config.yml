@@ -68,9 +68,29 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: ls
 
+      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: /workspace
+          # Must be relative path from root
+          paths:
+            - node_modules
+      - run: ls
+
   downstream:
     executor: my-executor
     steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /workplace/node_modules
+
+      - run: |
+          if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
+            echo "It worked!";
+          else
+            echo "Nope!"; exit 1
+          fi
       - checkout
       - run: ls
       - run: yarn test
@@ -87,7 +107,6 @@ jobs:
           else
             echo "Nope!"; exit 1
           fi
-      - run: ls
 
 workflows:
   version: 2
