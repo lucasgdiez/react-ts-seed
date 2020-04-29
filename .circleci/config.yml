@@ -29,6 +29,9 @@ jobs:
 
       - run: yarn build
 
+      - run: ls
+      - run: cd ..
+      - run: ls
       - store_artifacts:
           path: /build
 workflows:
