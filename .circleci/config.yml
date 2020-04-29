@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  build-and-test:
     docker:
       - image: circleci/node:12.9.1-browsers
     steps:
@@ -19,78 +19,22 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn build
-
-  unit-testing:
-    steps:
       - run: yarn test
 
-  e2e-testing:
-    steps:
       - run:
           name: 'Running React Server for e2e'
           command: sed -i '/process.env.CI/,+7 d' node_modules/react-scripts/scripts/start.js
 
       - run: yarn e2e
 
-  build_save:
-    - store_artifacts:
-        path: build
+      - run: yarn build
 
+      - run: cd build
+      - run: ls
+
+      - store_artifacts:
+          path: build
 workflows:
-  version: 2
-  build_accept_deploy:
+  build:
     jobs:
-      - build
-      - unit-testing-pipe:
-          requires:
-            - build
-      - e2e-testing-pipe:
-          requires:
-            - build
-      - saving-build:
-          requires:
-            - build
-  # build-and-test:
-  #   docker:
-  #     - image: circleci/node:12.9.1-browsers
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - v1-dependencies-{{ checksum "package.json" }}
-  #           # fallback to using the latest cache if no exact match is found
-  #           - v1-dependencies-
-  #     - run: yarn install
-  #     - save_cache:
-  #         paths:
-  #           - node_modules
-  #         key: v1-dependencies-{{ checksum "package.json" }}
-  #     - run: yarn test
-  #     - run:
-  #         name: 'Running React Server for e2e'
-  #         command: sed -i '/process.env.CI/,+7 d' node_modules/react-scripts/scripts/start.js
-  #     - run: yarn e2e
-  #     - run: yarn build
-  #     - run: cd build
-  #     - run: ls
-# workflows:
-#   build:
-#     jobs:
-#       - build
-#   unit-testing-pipe:
-#     jobs:
-#       - unit-testing
-#           requires:
-#             - build
-#   e2e-testing-pipe:
-#     jobs:
-#       - e2e-testing
-#           requires:
-#             -build
-#   saving-build:
-#     jobs:
-#       - build_save
-#           requires:
-#             - build
-
+      - build-and-test
