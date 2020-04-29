@@ -103,6 +103,14 @@ jobs:
           command: sed -i '/process.env.CI/,+7 d' node_modules/react-scripts/scripts/start.js
 
       - run: yarn e2e
+  Build-and-Deploy:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+          at: .
+      - run: yarn build
+      - run: cd build
+      - run: ls
 
 workflows:
   version: 2
@@ -116,3 +124,7 @@ workflows:
       - E2E-Testing:
           requires:
             - flow
+      - Build-and-Deploy:
+          requires:
+            - Unit-Testing
+            - E2E-Testing
