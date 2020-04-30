@@ -1,52 +1,3 @@
-# version: 2.1
-
-# jobs:
-#   build-and-test:
-#     docker:
-#       - image: circleci/node:12.9.1-browsers
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "package.json" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-
-#       - run: yarn install
-
-#       - save_cache:
-#           paths:
-#             - node_modules
-#           key: v1-dependencies-{{ checksum "package.json" }}
-
-#       - run: yarn test
-
-#       - run:
-#           name: 'Running React Server for e2e'
-#           command: sed -i '/process.env.CI/,+7 d' node_modules/react-scripts/scripts/start.js
-
-#       - run: yarn e2e
-
-#       - run: yarn build
-
-#       - run: cd build
-#       - run: ls
-
-#       - store_artifacts:
-#           path: build
-# workflows:
-#   build:
-#     jobs:
-#       - build-and-test
-
-version: 2.1
-
-# Setting up Docker Images to be used
-executors:
-  node-executor:
-    docker:
-      - image: circleci/node:12.9.1-browsers
-
 # Definitions of Jobs
 
 # Initial-Setup: Installs dependencies and forwards them.
@@ -75,6 +26,12 @@ executors:
 # Deploy:
 # - Deploys the build
 
+version: 2.1
+
+executors:
+  node-executor:
+    docker:
+      - image: circleci/node:12.9.1-browsers
 jobs:
   Initial-setup:
     executor: node-executor
