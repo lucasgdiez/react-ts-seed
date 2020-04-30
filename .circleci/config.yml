@@ -117,8 +117,8 @@ jobs:
     executor: node-executor
     steps:
       - attach_workspace:
-          at: build
-      - run: cd build ; ls
+          at: .
+      - run: ls
 
 workflows:
   version: 2
