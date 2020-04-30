@@ -41,10 +41,37 @@
 
 version: 2.1
 
+# Setting up Docker Images to be used
 executors:
   node-executor:
     docker:
       - image: circleci/node:12.9.1-browsers
+
+# Definitions of Jobs
+
+# Initial-Setup: Installs dependencies and forwards them.
+# - Executes Node Docker image
+# - Installs dependencies
+# - Saves cache and persists workspace to be forwarded to following pipes.
+
+# Unit-Testing: Runs Unit testing suite.
+# - Executes Node Docker image
+# - Attaches previous workspace (dependencies) and runs yarn test.
+
+# E2E-Testing: Runs E2E testing suite.
+# - Executes Node Docker image,
+# - attaches previous workspace (dependencies)
+# - restores cache so Cypress binaries are present to run, establish a command in which
+#   allows the react-scripts interactive terminal to run
+
+# Build:
+# - Executes Node Docker Image
+# - Attaches previous workspace (dependencies)
+# - Runs the provided build command
+# - Persist it to the following workspace to be consumed
+
+# Deploy:
+# - Deploys the build
 
 jobs:
   Initial-setup:
@@ -104,8 +131,6 @@ jobs:
       - attach_workspace:
           at: .
       - run: yarn build
-      - run: cd build
-      - run: ls
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
