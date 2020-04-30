@@ -115,6 +115,8 @@ jobs:
             - .
   Deploy:
     executor: node-executor
+    working_directory: ~/build
+
     steps:
       - attach_workspace:
           at: .
