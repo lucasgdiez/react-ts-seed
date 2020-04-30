@@ -121,7 +121,8 @@ jobs:
       - checkout
       - run: ls
       - run: cd build && ls
-
+      - store_artifacts:
+          path: build
 workflows:
   version: 2
 
