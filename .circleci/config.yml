@@ -115,10 +115,9 @@ jobs:
             - build
   Deploy:
     executor: node-executor
-    working_directory: build
+    working_directory: ~/build
     steps:
-      - attach_workspace:
-          at: .
+      - checkout
       - run: ls
       - run: cd build && ls
 
