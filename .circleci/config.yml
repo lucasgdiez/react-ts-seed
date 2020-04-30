@@ -42,13 +42,13 @@
 version: 2.1
 
 executors:
-  my-executor:
+  node-executor:
     docker:
       - image: circleci/node:12.9.1-browsers
 
 jobs:
-  flow:
-    executor: my-executor
+  Initial-setup:
+    executor: node-executor
     steps:
       - checkout
       - restore_cache:
@@ -76,14 +76,14 @@ jobs:
             - cache
 
   Unit-Testing:
-    executor: my-executor
+    executor: node-executor
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: .
       - run: yarn test
   E2E-Testing:
-    executor: my-executor
+    executor: node-executor
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
@@ -99,7 +99,7 @@ jobs:
 
       - run: yarn e2e
   Build:
-    executor: my-executor
+    executor: node-executor
     steps:
       - attach_workspace:
           at: .
@@ -113,7 +113,7 @@ jobs:
           paths:
             - build
   Deploy:
-    executor: my-executor
+    executor: node-executor
     steps:
       - attach_workspace:
           at: build
@@ -122,15 +122,15 @@ jobs:
 workflows:
   version: 2
 
-  btd:
+  Build-Test-Deploy:
     jobs:
-      - flow
+      - Initial-setup
       - Unit-Testing:
           requires:
-            - flow
+            - Initial-setup
       - E2E-Testing:
           requires:
-            - flow
+            - Initial-setup
       - Build:
           requires:
             - Unit-Testing
