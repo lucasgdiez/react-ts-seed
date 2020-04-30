@@ -112,13 +112,12 @@ jobs:
           root: .
           # Must be relative path from root
           paths:
-            - build
+            - .
   Deploy:
     executor: node-executor
     steps:
       - attach_workspace:
           at: .
-      - checkout
       - run: ls
       - run: cd build && ls
       - store_artifacts:
