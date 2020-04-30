@@ -52,17 +52,19 @@ executors:
 # Initial-Setup: Installs dependencies and forwards them.
 # - Executes Node Docker image
 # - Installs dependencies
-# - Saves cache and persists workspace to be forwarded to following pipes.
+# - Saves cache
+# - Persists workspace to be forwarded to following pipes.
 
 # Unit-Testing: Runs Unit testing suite.
 # - Executes Node Docker image
-# - Attaches previous workspace (dependencies) and runs yarn test.
+# - Attaches previous workspace (dependencies)
+# - Runs testing suite with yarn test.
 
 # E2E-Testing: Runs E2E testing suite.
 # - Executes Node Docker image,
-# - attaches previous workspace (dependencies)
-# - restores cache so Cypress binaries are present to run, establish a command in which
-#   allows the react-scripts interactive terminal to run
+# - Attaches previous workspace (dependencies)
+# - Restores cache so Cypress binaries are present to run.
+# - Establish a command in which allows the react-scripts interactive terminal to run
 
 # Build:
 # - Executes Node Docker Image
@@ -92,12 +94,8 @@ jobs:
             - ~/.cache/Cypress
           key: v4-dependencies-{{ checksum "package.json" }}
 
-      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
           root: .
-          # Must be relative path from root
           paths:
             - .
             - cache
@@ -106,14 +104,12 @@ jobs:
     executor: node-executor
     steps:
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: .
       - run: yarn test
   E2E-Testing:
     executor: node-executor
     steps:
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: .
       - restore_cache:
           keys:
@@ -132,10 +128,7 @@ jobs:
           at: .
       - run: yarn build
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
           root: .
-          # Must be relative path from root
           paths:
             - .
   Deploy:
