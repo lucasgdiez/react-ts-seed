@@ -116,6 +116,7 @@ jobs:
   Deploy:
     executor: node-executor
     working_directory: ~/build
+    steps:
       - run: ls
       - run: cd build && ls
 
