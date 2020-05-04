@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { Switch, Route } from 'react-router';
 import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../constants/theme';
 
 import { store, history } from './state-mgmt/store';
@@ -15,6 +16,7 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <ThemeProvider theme={theme}>
+          <CssBaseline />
           <ConnectedRouter history={history}>
             <Switch>
               <Route
