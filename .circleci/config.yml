@@ -32,9 +32,6 @@ executors:
   node-executor:
     docker:
       - image: circleci/node:12.9.1-browsers
-  aws-executor:
-    docker:
-      - image: cibuilds/aws:latest
 jobs:
   Initial-setup:
     executor: node-executor
@@ -92,28 +89,14 @@ jobs:
           paths:
             - .
   Deploy:
-    executor: aws-executor
-    environment:
-      BUILD_DIR: ~/publish
+    executor: node-executor
     steps:
       - attach_workspace:
           at: .
-      - run: apk update
-      - deploy:
-          name: deploy to AWS
-          command: |
-            if [ "${CIRCLE_BRANCH}" = "dev" ]; then
-              aws s3 sync $BUILD_DIR \
-              s3://dev.fcdevelopment.net/ --delete
-            fi
-            if [ "${CIRCLE_BRANCH}" = "qa" ]; then
-              aws s3 sync $BUILD_DIR \
-              s3://qa.fcdevelopment.net/ --delete
-            fi
-            if [ "${CIRCLE_BRANCH}" = "staging" ]; then
-              aws s3 sync $BUILD_DIR \
-              s3://staging.fcdevelopment.net/ --delete
-            fi
+      - run: ls
+      - run: cd build && ls
+      - store_artifacts:
+          path: build
 workflows:
   version: 2
 
