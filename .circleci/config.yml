@@ -98,22 +98,23 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: apk update
-      - deploy:
-          name: deploy to AWS
-          command: |
-            if [ "${CIRCLE_BRANCH}" = "dev" ]; then
-              aws s3 sync $BUILD_DIR \
-              s3://dev.fcdevelopment.net/ --delete
-            fi
-            if [ "${CIRCLE_BRANCH}" = "qa" ]; then
-              aws s3 sync $BUILD_DIR \
-              s3://qa.fcdevelopment.net/ --delete
-            fi
-            if [ "${CIRCLE_BRANCH}" = "staging" ]; then
-              aws s3 sync $BUILD_DIR \
-              s3://staging.fcdevelopment.net/ --delete
-            fi
+      - run: ls
+      # - run: apk update
+      # - deploy:
+      #     name: deploy to AWS
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" = "dev" ]; then
+      #         aws s3 sync $BUILD_DIR \
+      #         s3://dev.fcdevelopment.net/ --delete
+      #       fi
+      #       if [ "${CIRCLE_BRANCH}" = "qa" ]; then
+      #         aws s3 sync $BUILD_DIR \
+      #         s3://qa.fcdevelopment.net/ --delete
+      #       fi
+      #       if [ "${CIRCLE_BRANCH}" = "staging" ]; then
+      #         aws s3 sync $BUILD_DIR \
+      #         s3://staging.fcdevelopment.net/ --delete
+      #       fi
 workflows:
   version: 2
 
