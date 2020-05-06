@@ -100,7 +100,7 @@ jobs:
           at: .
       - run: ls
       - run: mv build publish
-      - run: cd publish & ls
+      - run: cd publish; ls
       - run: ls
       # - run: apk update
       # - deploy:
