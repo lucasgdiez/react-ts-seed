@@ -99,6 +99,8 @@ jobs:
       - attach_workspace:
           at: .
       - run: ls
+      - run: mv build publish
+      - run: cd publish & ls
       # - run: apk update
       # - deploy:
       #     name: deploy to AWS
